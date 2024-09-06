@@ -1,44 +1,77 @@
-﻿@{
-    ViewBag.Title = "Index";
-}
+﻿@using Web_253502_Yarashuk.Models
 
-<h1>Лабораторная работа 1</h1>
+
+<h1>@ViewData["Title"]</h1> <!-- Заголовок теперь отображает значение из ViewData -->
+
 <h3>Список</h3>
 <ol type="A">
-    <li>элемент 1 списка</li>
-    <li>элемент 2 списка</li>
+    @for (int i = 1; i <= 5; i++)
+    {
+        <li>элемент @i списка</li>
+    }
 </ol>
+
 <h3>Форма</h3>
-<form method="post" action="/submit">
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="checkbox1" id="checkbox1">
-        <label class="form-check-label" for="checkbox1">Чек-бокс 1</label>
+<form method="post" action="/Home/PostAction">
+    <!-- Укажите нужный метод для обработки формы -->
+    <div class="row mb-3">
+        <div class="col">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="checkbox1" id="checkbox1">
+                <label class="form-check-label" for="checkbox1">Чек-бокс 1</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="checkbox2" id="checkbox2">
+                <label class="form-check-label" for="checkbox2">Чек-бокс 2</label>
+            </div>
+        </div>
     </div>
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="checkbox2" id="checkbox2">
-        <label class="form-check-label" for="checkbox2">Чек-бокс 2</label>
+
+    <div class="row mb-3">
+        <div class="col">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="radio" id="radio1" value="1">
+                <label class="form-check-label" for="radio1">Радио-1</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="radio" id="radio2" value="2">
+                <label class="form-check-label" for="radio2">Радио-2</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="radio" id="radio3" value="3">
+                <label class="form-check-label" for="radio3">Радио-3</label>
+            </div>
+        </div>
     </div>
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="radio" id="radio1" value="1">
-        <label class="form-check-label" for="radio1">Радио-1</label>
+
+    <div class="row mb-3">
+        <div class="col">
+            <label for="login" class="form-label">Логин:</label>
+            <input type="text" class="form-control" id="login" name="login" placeholder="Введите имя">
+        </div>
     </div>
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="radio" id="radio2" value="2">
-        <label class="form-check-label" for="radio2">Радио-2</label>
+
+    <div class="row mb-3">
+        <div class="col">
+            <label for="password" class="form-label">Пароль:</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Введите пароль">
+        </div>
     </div>
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="radio" id="radio3" value="3">
-        <label class="form-check-label" for="radio3">Радио-3</label>
+
+    <!-- Новый селект -->
+    <div class="row mb-3">
+        <div class="col">
+            <label for="itemSelect" class="form-label">Выберите элемент:</label>
+            <select id="itemSelect" name="selectedItem" asp-items="ViewBag.ItemList" class="form-control">
+                <option value="">-- Выберите элемент --</option>
+                <!-- Здесь будут добавлены элементы автоматически методом asp-items -->
+            </select>
+        </div>
     </div>
-    <div class="mb-3">
-        <label for="login" class="form-label">Логин:</label>
-        <input type="text" class="form-control" id="login" name="login" placeholder="Введите имя">
-    </div>
-    <div class="mb-3">
-        <label for="password" class="form-label">Пароль:</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Введите пароль">
-    </div>
-    <div class="button-container">
-        <button type="submit" class="btn btn-primary">Отправить</button>
+
+    <div class="row mb-3 text-center">
+        <div class="col">
+            <button type="submit" class="btn btn-primary">Отправить</button>
+        </div>
     </div>
 </form>
