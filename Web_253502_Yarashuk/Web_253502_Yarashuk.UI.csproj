@@ -6,4 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Web_253502_Yarashuk.Domain\Web_253502_Yarashuk.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

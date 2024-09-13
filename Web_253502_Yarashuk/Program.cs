@@ -1,3 +1,5 @@
+using Web_253502_Yarashuk.UI.Extensions;
+
 namespace Web_253502_Yarashuk
 {
     public class Program
@@ -7,7 +9,10 @@ namespace Web_253502_Yarashuk
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
             builder.Services.AddControllersWithViews();
+
+            builder.RegisterCustomServices();
 
             var app = builder.Build();
 
@@ -29,6 +34,10 @@ namespace Web_253502_Yarashuk
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Product}/{action=Index}/{category?}");
+
 
             app.Run();
         }

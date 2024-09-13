@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Web_253502_Yarashuk.Models;
 
-namespace Web_253502_Yarashuk.Views.Shared.Components;
+namespace Web_253502_Yarashuk.UI.Views.Shared.Components;
 
 public class CartViewComponent : ViewComponent
 {
