@@ -26,7 +26,7 @@ public interface IProductService
     /// <param name="product">объект с новыми параметрами</param>
     /// <param name="formFile">Файл изображения</param>
     /// <returns></returns>
-    public Task UpdateProductAsync(int id, Product product, IFormFile? formFile);
+    public Task UpdateProductAsync(Product product, IFormFile? formFile);
     /// <summary>
     /// Удаление объекта
     /// </summary>

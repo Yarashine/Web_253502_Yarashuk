@@ -101,5 +101,9 @@ public class MemoryProductService : IProductService
         }
     }
 
+    public Task UpdateProductAsync(Product product, IFormFile? formFile)
+    {
+        throw new NotImplementedException();
+    }
 }
 

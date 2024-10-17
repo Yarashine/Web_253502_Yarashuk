@@ -15,22 +15,26 @@ public class ProductService : IProductService
     {
         _context = context;
     }
-
-    public Task<ResponseData<Product>> CreateProductAsync(Product product)
+    public async Task<ResponseData<Product>> CreateProductAsync(Product product)
     {
-        throw new NotImplementedException();
+        _context.Products.Add(product);
+        await _context.SaveChangesAsync();
+        return new ResponseData<Product>
+        {
+            Data = product,
+            Successfull = true
+        };
     }
 
-    public Task DeleteProductAsync(int id)
+    public async Task DeleteProductAsync(int id)
     {
-        throw new NotImplementedException();
+        var product = await _context.Products.FindAsync(id);
+        if (product != null)
+        {
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+        }
     }
-
-    public Task<ResponseData<Product>> GetProductByIdAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<ResponseData<ListModel<Product>>> GetProductListAsync(string? categoryNormalizedName,int pageNo = 1, 
         int pageSize = 3)
     {
@@ -55,13 +59,51 @@ public class ProductService : IProductService
         return ResponseData<ListModel<Product>>.Success(dataList);
     }
 
+   
+
+    public async Task<ResponseData<Product>> GetProductByIdAsync(int id)
+    {
+        var product = await _context.Products.FindAsync(id);
+        if (product == null)
+        {
+            var res = new ResponseData<Product>
+            {
+                Data = null,
+                Successfull = false,
+                ErrorMessage = "Нет такого товара"
+            };
+            return res;
+        }
+        var result = new ResponseData<Product>
+        {
+            Data = product,
+            Successfull = true
+        };
+
+        return result;
+    }
+
     public Task<ResponseData<string>> SaveImageAsync(int id, IFormFile formFile)
     {
         throw new NotImplementedException();
     }
 
-    public Task UpdateProductAsync(int id, Product product)
+    public async Task UpdateProductAsync(int id, Product product)
     {
-        throw new NotImplementedException();
+        var dbProduct = await _context.Products.FindAsync(id);
+        if (dbProduct != null)
+        {
+            dbProduct.Name = product.Name;
+            dbProduct.Description = product.Description;
+            dbProduct.Price = product.Price;
+            if (product.ImagePath is not null)
+            {
+                dbProduct.ImagePath = product.ImagePath;
+            }
+
+            dbProduct.CategoryId = product.CategoryId;
+            _context.Update(dbProduct);
+            await _context.SaveChangesAsync();
+        }
     }
 }
