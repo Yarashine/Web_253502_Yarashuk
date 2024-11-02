@@ -1,8 +1,10 @@
 ﻿
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Web_253502_Yarashuk.API.Data;
 using Web_253502_Yarashuk.API.Services.CategoryService;
 using Web_253502_Yarashuk.API.Services.ProductService;
+using Web_253502_Yarashuk.API.Models;
 using Web_253502_Yarashuk.Data;
 
 namespace Web_253502_Yarashuk.API
@@ -14,6 +16,8 @@ namespace Web_253502_Yarashuk.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -28,8 +32,28 @@ namespace Web_253502_Yarashuk.API
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlite(connectionString));
 
+            var authServer = builder.Configuration.GetSection("AuthServer").Get<AuthServerData>();
+            //var a = $"{authServer.Host}/realms/{authServer.Realm}/.well-known/openid-configuration";
 
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, o =>
+                {
+                    // Адрес метаданных конфигурации OpenID
+                    o.MetadataAddress = $"{authServer.Host}/realms/{authServer.Realm}/.well-known/openid-configuration";
 
+                    // Authority сервера аутентификации
+                    o.Authority = $"http://localhost:8080/realms/Yarashuk";
+                    // Audience для токена JWT
+                    o.Audience = "account";
+                    // Запретить HTTPS для использования локальной версии Keycloak
+                    // В рабочем проекте должно быть true
+                    o.RequireHttpsMetadata = false;
+                });
+
+            builder.Services.AddAuthorization(opt =>
+            {
+                opt.AddPolicy("admin", p => p.RequireRole("POWER-USER"));
+            });
 
             var app = builder.Build();
 
@@ -44,9 +68,10 @@ namespace Web_253502_Yarashuk.API
             app.UseStaticFiles();
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
-            DbInitializer.SeedData(app);
+            //DbInitializer.SeedData(app);
 
             app.MapControllers();
 

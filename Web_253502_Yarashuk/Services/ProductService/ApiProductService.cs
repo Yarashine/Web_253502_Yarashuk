@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using Web_253502_Yarashuk.Domain.Entities;
 using Web_253502_Yarashuk.Domain.Models;
+using Web_253502_Yarashuk.UI.Services.Authentication;
 using Web_253502_Yarashuk.UI.Services.FileService;
 
 namespace Web_253502_Yarashuk.UI.Services.ProductService;
@@ -14,7 +15,8 @@ public class ApiProductService : IProductService
     private readonly JsonSerializerOptions _serializerOptions;
     private string _pageSize;
     private readonly IFileService _fileService;
-    public ApiProductService(HttpClient httpClient, IConfiguration configuration, ILogger<ApiProductService> logger, IFileService fileService)
+    private readonly ITokenAccessor _tokenAccessor;
+    public ApiProductService(HttpClient httpClient, IConfiguration configuration, ILogger<ApiProductService> logger, IFileService fileService, ITokenAccessor tokenAccessor)
     {
         _httpClient = httpClient;
         _pageSize = configuration.GetSection("ItemsPerPage").Value;
@@ -26,10 +28,13 @@ public class ApiProductService : IProductService
         _logger = logger;
 
         _fileService = fileService;
+        _tokenAccessor = tokenAccessor;
     }
 
     public async Task<ResponseData<Product>> CreateProductAsync(Product product, IFormFile file)
     {
+        await _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient);
+
         product.ImagePath = "Images/noimage.jpg";
         if (file != null)
         {
@@ -54,6 +59,8 @@ public class ApiProductService : IProductService
 
     public async Task DeleteProductAsync(int id)
     {
+        await _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient);
+
         var urlString = $"{_httpClient.BaseAddress!.AbsoluteUri}Products/{id}";
         var uri = new Uri(urlString);
         var product = await GetProductByIdAsync(id);
@@ -74,6 +81,8 @@ public class ApiProductService : IProductService
 
     public async Task<ResponseData<Product>> GetProductByIdAsync(int id)
     {
+        await _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient);
+
         var urlString = $"{_httpClient.BaseAddress!.AbsoluteUri}Products/id-{id}";
         var uri = new Uri(urlString);
 
@@ -99,6 +108,8 @@ public class ApiProductService : IProductService
 
     public async Task<ResponseData<ListModel<Product>>> GetProductListAsync(string? categoryNormalizedName,int pageNo = 1)
     {
+        await _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient);
+
         // подготовка URL запроса
         var urlString = new StringBuilder($"{_httpClient.BaseAddress.AbsoluteUri}Products");
         // добавить категорию в маршрут
@@ -152,6 +163,7 @@ public class ApiProductService : IProductService
     }
     public static string GetFileName(string path)
     {
+
         // Если это URL, извлекаем все после последнего '/'
         if (Uri.IsWellFormedUriString(path, UriKind.Absolute))
         {
@@ -164,6 +176,8 @@ public class ApiProductService : IProductService
     }
     public async Task UpdateProductAsync(Product product, IFormFile formFile)
     {
+        await _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient);
+
         if (formFile != null)
         {
             var path = product.ImagePath;

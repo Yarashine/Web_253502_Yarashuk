@@ -1,28 +1,49 @@
-﻿@await Component.InvokeAsync("Cart")
-<div class="dropdown ms-4 nav-color">
-    <button class="btn btn-secondary dropdown-toggle"
-            type="button" id="dropdownMenuButton"
-            data-bs-toggle="dropdown"
-            aria-expanded="false">
-        User@gmail.com
-        <img src="~/images/default-profile-picture.jfif" width="30"
-             alt="User" class="rounded nav-color" />
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <li>
-            <span class="dropdown-item-text">
-                <img src="~/images/default-profile-picture.jfif" width="50" alt="User" class="rounded" />
-                user@gmail.com
-            </span>
-        </li>
-        <li><hr class="dropdown-divider"></li>
-        <li>
-            <a asp-controller="Cart" asp-action="Index" class="dropdown-item">Корзина</a>
-        </li>
-        <li>
-            <form id="logoutForm" class="form-inline" asp-controller="Account" asp-action="LogOut" method="post">
-                <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-            </form>
-        </li>
-    </ul>
-</div>
+﻿@using System.Linq
+@await Component.InvokeAsync("Cart")
+
+@{
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString()?.ToLower() ?? string.Empty;
+    var area = ViewContext.RouteData.Values["area"]?.ToString()?.ToLower() ?? string.Empty;
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="dropdown ms-4 nav-color">
+        <button class="btn btn-secondary dropdown-toggle"
+                type="button" id="dropdownMenuButton"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+            @{
+                var name = User.Claims.FirstOrDefault(c => c.Type.Equals("preferred_username", StringComparison.OrdinalIgnoreCase))?.Value;
+                var avatar = User.Claims.FirstOrDefault(c => c.Type.Equals("avatar", StringComparison.OrdinalIgnoreCase))?.Value;
+
+                @name
+                <img src="@avatar" width="30" alt="User" class="rounded nav-color" />
+            }
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li>
+                <span class="dropdown-item-text">
+                    <img src="@avatar" width="50" alt="User" class="rounded" />
+                    @name
+                </span>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <form id="logoutForm" class="form-inline" asp-controller="Account" asp-action="Logout" method="post">
+                    <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+}
+else
+{
+
+    <div class="navbar-nav ms-auto">
+        <a class="nav-item nav-link @(controller == "account" && ViewContext.RouteData.Values["action"]?.ToString() == "Login" ? "active" : "")"
+           asp-controller="Account" asp-action="Login">Вход</a>
+        <a class="nav-item nav-link @(controller == "account" && ViewContext.RouteData.Values["action"]?.ToString() == "Register" ? "active" : "")"
+           asp-controller="Account" asp-action="Register">Регистрация</a>
+    </div>
+}

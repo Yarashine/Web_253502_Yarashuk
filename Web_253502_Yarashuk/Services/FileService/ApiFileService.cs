@@ -1,6 +1,7 @@
 ﻿
 
 using Microsoft.AspNetCore.Http;
+using Web_253502_Yarashuk.UI.Services.Authentication;
 
 namespace Web_253502_Yarashuk.UI.Services.FileService;
 
@@ -10,13 +11,19 @@ public class ApiFileService : IFileService
 {
     private readonly HttpClient _httpClient;
 
-    public ApiFileService(HttpClient httpClient)
+    private readonly ITokenAccessor _tokenAccessor;
+
+    public ApiFileService(HttpClient httpClient, ITokenAccessor tokenAccessor)
     {
+
+        _tokenAccessor = tokenAccessor;
         _httpClient = httpClient;
     }
 
     public async Task DeleteFileAsync(string fileName)
     {
+
+        await _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient);
         var requestUri = new Uri(_httpClient.BaseAddress, $"/api/Files/DeleteFile?fileName={fileName}");
 
         var request = new HttpRequestMessage
@@ -35,6 +42,8 @@ public class ApiFileService : IFileService
 
     public async Task<string> SaveFileAsync(IFormFile formFile)
     {
+
+        await _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient);
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Post

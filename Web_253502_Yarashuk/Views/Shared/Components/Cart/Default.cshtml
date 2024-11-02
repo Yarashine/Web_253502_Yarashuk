@@ -1,4 +1,7 @@
 ﻿
+@if (User.Identity.IsAuthenticated)
+{
 <a href="#" class="navbar-text ms-auto">
     00,0 руб <i class="fa-solid fa-cart-shopping"></i> (0)
 </a>
+}

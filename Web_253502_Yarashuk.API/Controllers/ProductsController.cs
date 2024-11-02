@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +45,7 @@ namespace Web_253502_Yarashuk.API.Controllers
 
 
         [HttpPut("{id}")]
+        [Authorize(Policy = "admin")]
         public async Task<IActionResult> PutProduct(int id, Product product)
         {
             await _productService.UpdateProductAsync(id, product);
@@ -51,6 +53,7 @@ namespace Web_253502_Yarashuk.API.Controllers
         }
 
         [HttpGet("id-{id}")]
+        [Authorize]
         public async Task<ActionResult<Product>> GetProduct([FromRoute] int id)
         {
             var productResponse = await _productService.GetProductByIdAsync(id);
@@ -58,12 +61,14 @@ namespace Web_253502_Yarashuk.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "admin")]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
             return Ok(await _productService.CreateProductAsync(product));
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = "admin")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             await _productService.DeleteProductAsync(id);
