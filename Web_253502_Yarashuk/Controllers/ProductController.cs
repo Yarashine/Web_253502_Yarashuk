@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Web_253502_Yarashuk.UI.Services.CategoryService;
 using Web_253502_Yarashuk.UI.Services.ProductService;
+using Web_253502_Yarashuk.UI.Extensions;
+using Web_253502_Yarashuk.Domain.Models;
+using Web_253502_Yarashuk.Domain.Entities;
 
 public class ProductController : Controller
 {
@@ -14,8 +17,7 @@ public class ProductController : Controller
         _productService = productService;
         _categoryService = categoryService;
     }
-
-    public async Task<IActionResult> Index(string? category, int pageNo = 1)
+    public async Task<IActionResult> Index([FromServices] IConfiguration config, string? category, int pageNo = 1)
     {
         var categories = await _categoryService.GetCategoryListAsync();
 
@@ -29,6 +31,15 @@ public class ProductController : Controller
         ViewData["currentCategory"] = categories.Data.FirstOrDefault(c => c.NormalizedName == category)?.Name ?? "Все";
         ViewData["curCategory"] = category ?? "Все";
         ViewBag.Categories = categories.Data;
+
+
+
+        // Проверяем, является ли запрос AJAX-запросом
+        if (Request.IsAjaxRequest())
+        {
+            return PartialView("_CatalogPartial", productsResponse.Data); // Возвращаем частичное представление
+        }
+
 
         return View(productsResponse.Data);
     }

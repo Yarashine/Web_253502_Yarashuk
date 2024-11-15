@@ -45,7 +45,7 @@ namespace Web_253502_Yarashuk.API.Controllers
 
 
         [HttpPut("{id}")]
-        [Authorize(Policy = "admin")]
+        //[Authorize(Policy = "admin")]
         public async Task<IActionResult> PutProduct(int id, Product product)
         {
             await _productService.UpdateProductAsync(id, product);

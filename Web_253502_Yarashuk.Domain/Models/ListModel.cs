@@ -1,12 +1,17 @@
-﻿namespace Web_253502_Yarashuk.Domain.Models;
+﻿using Web_253502_Yarashuk.Domain.Entities;
 
-public class ListModel<T>
+namespace Web_253502_Yarashuk.Domain.Models
 {
-    // запрошенный список объектов
-    public List<T> Items { get; set; } = new();
-    // номер текущей страницы
-    public int CurrentPage { get; set; } = 1;
-    // общее количество страниц
-    public int TotalPages { get; set; } = 1;
-}
+    public class ListModel<T>
+    {
+        // Запрошенный список объектов
+        public List<T> Items { get; set; } = new();
 
+        // Номер текущей страницы
+        public int CurrentPage { get; set; } = 1;
+
+        // Общее количество страниц
+        public int TotalPages { get; set; } = 1;
+
+    }
+}
