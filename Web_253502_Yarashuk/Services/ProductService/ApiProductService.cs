@@ -108,7 +108,7 @@ public class ApiProductService : IProductService
 
     public async Task<ResponseData<ListModel<Product>>> GetProductListAsync(string? categoryNormalizedName,int pageNo = 1)
     {
-        //await _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient);
+        await _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient);
 
         // подготовка URL запроса
         var urlString = new StringBuilder($"{_httpClient.BaseAddress.AbsoluteUri}Products");

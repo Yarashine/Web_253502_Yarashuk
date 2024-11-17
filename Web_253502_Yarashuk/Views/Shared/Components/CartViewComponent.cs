@@ -1,26 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Web_253502_Yarashuk.Models;
-
-namespace Web_253502_Yarashuk.UI.Views.Shared.Components;
+using Web_253502_Yarashuk.Domain.Entities;
 
 public class CartViewComponent : ViewComponent
 {
-    public IViewComponentResult Invoke()
-    {
-        // Логика получения данных о корзине
-        var cartModel = GetCartModel();
+    private readonly Cart _cart;
 
-        return View(cartModel);
+    public CartViewComponent(Cart cart)
+    {
+        _cart = cart;
     }
 
-    private CartModel GetCartModel()
+    public IViewComponentResult Invoke()
     {
-        // Ваша логика для получения данных о корзине
-        // Например:
-        return new CartModel
+        var cartModel = new
         {
-            ItemCount = 3,
-            TotalPrice = 150.0m
+            ItemCount = _cart.Count,
+            TotalPrice = _cart.TotalPrice
         };
+
+        return View(cartModel);
     }
 }

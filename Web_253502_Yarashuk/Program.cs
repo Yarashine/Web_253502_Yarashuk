@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Web_253502_Yarashuk.UI.Services.Authentication;
 using Web_253502_Yarashuk.UI.Services.Authorization;
+using Web_253502_Yarashuk.Domain.Entities;
+using Web_253502_Yarashuk.UI.Services.Cart;
 
 namespace Web_253502_Yarashuk;
 //проблема в том что у меня создаются в юд 2 типа файлов, ззачем это нужно
@@ -37,9 +39,15 @@ public class Program
         builder.Services
             .Configure<KeycloakData>(builder.Configuration.GetSection("Keycloak"));
 
+        builder.Services.AddScoped<Cart, SessionCart>();
+
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddHttpClient<ITokenAccessor, KeycloakTokenAccessor>();
         builder.Services.AddHttpClient<IAuthService, KeycloakAuthService>();
+
+        builder.Services.AddDistributedMemoryCache();
+        builder.Services.AddSession();
+
         var keycloakData =
         builder.Configuration.GetSection("Keycloak").Get<KeycloakData>();
         builder.Services
@@ -66,6 +74,7 @@ public class Program
 
         var app = builder.Build();
 
+
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
         {
@@ -73,6 +82,9 @@ public class Program
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
+
+        app.UseSession();
+
 
         app.UseHttpsRedirection();
         app.UseStaticFiles();

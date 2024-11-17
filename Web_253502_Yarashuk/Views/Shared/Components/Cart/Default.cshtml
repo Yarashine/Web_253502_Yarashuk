@@ -1,7 +1,17 @@
 ﻿
 @if (User.Identity.IsAuthenticated)
 {
-<a href="#" class="navbar-text ms-auto">
-    00,0 руб <i class="fa-solid fa-cart-shopping"></i> (0)
-</a>
+    @if (Model.ItemCount > 0)
+    {
+        <a href="@Url.Action("Index", "Cart")" class="navbar-text ms-auto">
+            @Model.TotalPrice руб <i class="fa-solid fa-cart-shopping"></i> (@Model.ItemCount)
+        </a>
+    }
+    else
+    {
+        <a href="#" class="navbar-text ms-auto">
+            00,0 руб <i class="fa-solid fa-cart-shopping"></i> (0)
+        </a>
+    }
+
 }
