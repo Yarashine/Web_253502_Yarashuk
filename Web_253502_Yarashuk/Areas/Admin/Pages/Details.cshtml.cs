@@ -29,6 +29,7 @@ public class DetailsModel : PageModel
         }
 
         var product = await _productService.GetProductByIdAsync(id.Value);
+        product = null;
         if (product == null)
         {
             return NotFound();

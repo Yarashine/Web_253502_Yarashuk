@@ -11,6 +11,8 @@ using Web_253502_Yarashuk.UI.Services.Authentication;
 using Web_253502_Yarashuk.UI.Services.Authorization;
 using Web_253502_Yarashuk.Domain.Entities;
 using Web_253502_Yarashuk.UI.Services.Cart;
+using Web_253502_Yarashuk.UI.Middlewares;
+using Serilog;
 
 namespace Web_253502_Yarashuk;
 //проблема в том что у меня создаются в юд 2 типа файлов, ззачем это нужно
@@ -70,10 +72,16 @@ public class Program
             options.MetadataAddress = $"{keycloakData.Host}/realms/{keycloakData.Realm}/.well-known/openid-configuration";
         });
 
+        builder.Host.UseSerilog((context, services, configuration) => configuration
+            .ReadFrom.Configuration(context.Configuration)
+            .WriteTo.Console()
+            .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day));
 
 
         var app = builder.Build();
 
+
+        app.UseMiddleware<RequestLoggingMiddleware>();
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
@@ -101,10 +109,11 @@ public class Program
             name: "default",
             pattern: "{controller=Product}/{action=Index}/{category?}");
 
-    
+
 
 
         app.MapRazorPages();
+
 
         app.Run();
     }
