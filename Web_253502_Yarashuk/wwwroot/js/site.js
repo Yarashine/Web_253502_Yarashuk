@@ -14,6 +14,10 @@
                     var pageNo = urlParams.get('pageNo');
                     var category = link.pathname.split('/')[2];
 
+                    $('product-list-container').load()
+
+
+
                     // Выполняем асинхронный запрос
                     fetch(`/Catalog/${category}?pageNo=${pageNo}`, {
                         method: 'GET',
