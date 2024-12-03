@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web_253502_Yarashuk.Tests",
 		{CC728258-39F8-4F57-8015-F56EC1429407} = {CC728258-39F8-4F57-8015-F56EC1429407}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web_253502_Yarashuk.Blazor.SSR", "Web_253502_Yarashuk.Blazor.SSR\Web_253502_Yarashuk.Blazor.SSR.csproj", "{B502F2ED-AA63-486C-8DF1-8A85308C4FDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web_253502_Yarashuk.Blazor.SSR", "Web_253502_Yarashuk.Blazor.SSR\Web_253502_Yarashuk.Blazor.SSR.csproj", "{B502F2ED-AA63-486C-8DF1-8A85308C4FDC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web_253502_Yarashuk.BlazorWasm", "Web_253502_Yarashuk.BlazorWasm\Web_253502_Yarashuk.BlazorWasm.csproj", "{FBFC0455-751E-4FDB-ACC9-E9CA4397DA09}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{B502F2ED-AA63-486C-8DF1-8A85308C4FDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B502F2ED-AA63-486C-8DF1-8A85308C4FDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B502F2ED-AA63-486C-8DF1-8A85308C4FDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBFC0455-751E-4FDB-ACC9-E9CA4397DA09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBFC0455-751E-4FDB-ACC9-E9CA4397DA09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBFC0455-751E-4FDB-ACC9-E9CA4397DA09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBFC0455-751E-4FDB-ACC9-E9CA4397DA09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

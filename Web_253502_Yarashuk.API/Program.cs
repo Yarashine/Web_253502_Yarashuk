@@ -6,6 +6,8 @@ using Web_253502_Yarashuk.API.Services.CategoryService;
 using Web_253502_Yarashuk.API.Services.ProductService;
 using Web_253502_Yarashuk.API.Models;
 using Web_253502_Yarashuk.Data;
+using Web_253502_Yarashuk.Domain.Entities;
+using static System.Net.WebRequestMethods;
 
 namespace Web_253502_Yarashuk.API
 {
@@ -55,7 +57,17 @@ namespace Web_253502_Yarashuk.API
                 opt.AddPolicy("admin", p => p.RequireRole("POWER-USER"));
             });
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    policy => policy.WithOrigins("https://localhost:7193")
+                                    .AllowAnyMethod()
+                                    .AllowAnyHeader());
+            });
+
             var app = builder.Build();
+
+            app.UseCors("AllowSpecificOrigin");
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -76,6 +88,8 @@ namespace Web_253502_Yarashuk.API
             app.MapControllers();
 
             app.Run();
+
+
         }
     }
 }

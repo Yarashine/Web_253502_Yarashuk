@@ -1,0 +1,30 @@
+﻿
+
+@if (SelectedProduct != null)
+{
+    <h3>Детали продукта</h3>
+    <div>
+        <dl class="row">
+            <dt class="col-sm-2">Название:</dt>
+            <dd class="col-sm-10">@SelectedProduct.Name</dd>
+
+            <dt class="col-sm-2">Описание:</dt>
+            <dd class="col-sm-10">@SelectedProduct.Description</dd>
+
+            <dt class="col-sm-2">Цена:</dt>
+            <dd class="col-sm-10">@SelectedProduct.Price.ToString("C")</dd>
+
+            <dt class="col-sm-2">Изображение:</dt>
+            <dd class="col-sm-10">
+                <img src="@SelectedProduct.ImagePath" alt="Изображение продукта" style="max-width: 100%; height: auto;" />
+            </dd>
+        </dl>
+    </div>
+}
+else
+{
+}
+
+@code {
+    [Parameter] public Product? SelectedProduct { get; set; }
+}

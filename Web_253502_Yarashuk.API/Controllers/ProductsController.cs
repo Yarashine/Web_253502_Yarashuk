@@ -27,6 +27,7 @@ namespace Web_253502_Yarashuk.API.Controllers
             _context = context;
         }
 
+        [Authorize]
         [HttpGet("{category?}")]
         //[HttpGet]
         public async Task<ActionResult<ResponseData<List<Product>>>> GetProducts([FromRoute] string? category = null, [FromQuery] int pageNo = 1,
@@ -43,7 +44,7 @@ namespace Web_253502_Yarashuk.API.Controllers
         }
 
 
-
+        [Authorize]
         [HttpPut("{id}")]
         //[Authorize(Policy = "admin")]
         public async Task<IActionResult> PutProduct(int id, Product product)

@@ -1,0 +1,57 @@
+﻿@inject IDataService DataService
+<h3>Продукты</h3>
+
+@if (DataService.Products.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Название продукта</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in DataService.Products)
+            {
+                <tr>
+                    <td>@product.Name</td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="() => OnProductSelected.InvokeAsync(product.Id)"><span class="oi oi-magnifying-glass" aria-hidden="true"></span>Подробно  </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Данные не загружены.</p>
+}
+
+@code {
+    [Parameter] public EventCallback<int> OnProductSelected { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Инициализация данных
+        await DataService.GetProductListAsync();
+
+    }
+
+    protected override void OnInitialized()
+    {
+        // Подписка на событие DataLoaded
+        DataService.DataLoaded += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        // Отписка от события DataLoaded
+        DataService.DataLoaded -= StateHasChanged;
+    }
+
+    private void ShowDetails(Product product)
+    {
+        Console.WriteLine($"Детали: {product.Name}");
+    }
+}

@@ -1,0 +1,20 @@
+﻿@page "/catalog"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@inject IDataService DataService
+
+<h3>Список продуктов</h3>
+
+<CategorySelector />
+<ProductList OnProductSelected="OnProductSelected" />
+<Pager />
+<ProductDetails SelectedProduct="SelectedProduct" />
+
+@code {
+    private Product? SelectedProduct;
+
+    private void OnProductSelected(int productId)
+    {
+        SelectedProduct = DataService.Products.FirstOrDefault(p => p.Id == productId);
+    }
+}

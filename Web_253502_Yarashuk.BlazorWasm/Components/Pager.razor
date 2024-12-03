@@ -1,0 +1,60 @@
+﻿@using Web_253502_Yarashuk.Domain.Entities
+@inject IDataService DataService
+
+@if (DataService.TotalPages > 1)
+{
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <!-- Previous Page Button -->
+            <li class="page-item @(DataService.CurrentPage == 1 ? "disabled" : "")">
+                <button class="page-link" @onclick="() => OnPageChanged(DataService.CurrentPage - 1)" disabled="@((DataService.CurrentPage == 1))">
+                    «
+                </button>
+            </li>
+
+            @foreach (var i in Enumerable.Range(1, DataService.TotalPages))
+            {
+                <li class="page-item @(i == DataService.CurrentPage ? "active" : "")">
+                    <button class="page-link" @onclick="() => OnPageChanged(i)">
+                        @i
+                    </button>
+
+                </li>
+            }
+
+
+            <!-- Next Page Button -->
+            <li class="page-item @(DataService.CurrentPage == DataService.TotalPages ? "disabled" : "")">
+                <button class="page-link" @onclick="() => OnPageChanged(DataService.CurrentPage + 1)" disabled="@((DataService.CurrentPage == DataService.TotalPages))">
+                    »
+                </button>
+            </li>
+        </ul>
+    </nav>
+}
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        // Инициализация данных
+        if (DataService.TotalPages == 0)
+            await DataService.GetProductListAsync();
+        // Подписываемся на событие DataLoaded
+        DataService.DataLoaded += OnDataLoaded;
+    }
+
+    private void OnDataLoaded()
+    {
+        // Обновляем пагинацию после загрузки данных
+        StateHasChanged(); // Перерисовать компонент
+    }
+
+    private async Task OnPageChanged(int pageNumber)
+    {
+        // Переход на выбранную страницу
+        if (pageNumber >= 1 && pageNumber <= DataService.TotalPages)
+        {
+            await DataService.GetProductListAsync(pageNumber);
+        }
+    }
+}

@@ -1,0 +1,51 @@
+﻿@using Web_253502_Yarashuk.Domain.Entities
+@inject IDataService DataService
+
+<h5>Выберите категорию</h5>
+@if (DataService.Categories.Any())
+{
+    <select class="form-select" @onchange="OnCategoryChanged">
+        <option value="">Все категории</option>
+        @foreach (var category in DataService.Categories)
+        {
+            <option value="@category.Name">@category.Name</option>
+        }
+    </select>
+}
+
+@code {
+    // Привязка к строковому значению, которое будет использовано для выбора категории
+    //private string SelectedCategoryName { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Инициализация данных категорий
+        await DataService.GetCategoryListAsync();
+    }
+
+    // Метод, вызываемый после изменения выбранной категории
+    private async Task OnCategoryChanged(ChangeEventArgs e)
+    {
+        // Получаем значение выбранной категории из события
+        var selectedCategoryName = e.Value?.ToString();
+
+        // Ищем категорию по имени
+        var selectedCategory = DataService.Categories
+            .FirstOrDefault(c => c.Name == selectedCategoryName);
+
+        if (selectedCategory != null)
+        {
+            // Устанавливаем выбранную категорию в DataService
+            DataService.SelectedCategory = selectedCategory;
+        }
+        else
+        {
+            // Если выбрана категория "Все категории"
+            DataService.SelectedCategory = null;
+        }
+        DataService.CurrentPage = 1;
+
+        // Получаем список продуктов для выбранной категории
+        await DataService.GetProductListAsync();
+    }
+}
