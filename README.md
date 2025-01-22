@@ -1,2 +1,2 @@
-Universal Online Store
+Universal Online Store  
 The online store is written in C#. It supports multiple user roles, CRUD operations for products, and a shopping cart feature. The project uses a three-layer architecture: Domain, API, and UI. The API part is built with ASP.NET Core, Entity Framework, and PostgreSQL. The shopping cart works with sessions, and user authorization is implemented using JWT and Keycloak (via Docker). The UI part is created with Razor Pages and partially duplicated with Blazor. Some features are tested using xUnit, and logging is managed with Serilog.
